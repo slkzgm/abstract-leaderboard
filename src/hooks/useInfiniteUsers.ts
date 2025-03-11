@@ -62,17 +62,13 @@ export function useInfiniteUsers() {
   useEffect(() => {
     // Only reset and fetch when sort field, sort order, or search changes
     // Not when skip changes
-    const handleSortOrSearchChange = () => {
-      setShouldResetData(true)
-      setParams(prev => ({
-        ...prev,
-        skip: 0,
-      }))
-    }
+    setShouldResetData(true)
+    setParams(prev => ({
+      ...prev,
+      skip: 0,
+    }))
 
-    return () => {
-      // This cleanup function ensures we don't reset data when unmounting
-    }
+    // This effect only runs when sort or search params change
   }, [params.sortField, params.sortOrder, params.search])
 
   // Separate effect for fetching data
