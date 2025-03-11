@@ -42,7 +42,8 @@ export default function Leaderboard() {
     <div className="leaderboard-container">
       <h1 className="leaderboard-title">Abstract Leaderboard</h1>
       <div className="mb-4 text-center text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-xl p-3 text-sm">
-        Note: Only users with more than 10,000 experience points (Silver+ tier) are displayed in this leaderboard
+        Note: Only users with more than 10,000 experience points (Silver+ tier) are displayed in
+        this leaderboard
       </div>
 
       <div className="mb-8 flex flex-col sm:flex-row gap-4 justify-between items-center">
