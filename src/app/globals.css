@@ -1,26 +1,80 @@
-@import "tailwindcss";
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --foreground-rgb: 15, 23, 42;
+  --background-rgb: 249, 250, 251;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 15, 23, 42;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-rgb));
+}
+
+/* Modern leaderboard styles */
+.leaderboard-container {
+  @apply max-w-5xl mx-auto px-4 py-8 md:px-6 lg:px-8;
+}
+
+.leaderboard-title {
+  @apply text-3xl md:text-4xl font-bold text-center mb-8 text-primary-600 dark:text-primary-400;
+}
+
+.leaderboard-card {
+  @apply bg-white dark:bg-gray-800 shadow-card rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700;
+}
+
+.leaderboard-header {
+  @apply grid grid-cols-12 gap-2 md:gap-4 p-4 font-semibold bg-gray-50 dark:bg-gray-750 text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700;
+}
+
+.leaderboard-row {
+  @apply grid grid-cols-12 gap-2 md:gap-4 p-4 items-center hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-150;
+}
+
+.leaderboard-row-top {
+  @apply bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30;
+}
+
+/* Modern form elements */
+.search-input {
+  @apply w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 shadow-sm transition-all duration-200;
+}
+
+.sort-button {
+  @apply flex items-center justify-center px-3 py-2 rounded-xl font-medium shadow-sm transition-all duration-200;
+}
+
+.sort-button-active {
+  @apply bg-primary-100 dark:bg-primary-900/50 text-primary-800 dark:text-primary-200 border border-primary-200 dark:border-primary-800/50;
+}
+
+.sort-button-inactive {
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-750;
+}
+
+/* Badge styles for top ranks */
+.rank-badge {
+  @apply inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold text-sm;
+}
+
+.rank-badge-1 {
+  @apply bg-yellow-400;
+}
+
+.rank-badge-2 {
+  @apply bg-gray-300 dark:bg-gray-400;
+}
+
+.rank-badge-3 {
+  @apply bg-amber-600;
 }

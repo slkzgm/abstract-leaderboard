@@ -1,0 +1,27 @@
+# Ignore build folders
+.next/
+dist/
+out/
+build/
+coverage/
+
+# Ignore dependency directories
+node_modules/
+
+# Ignore various system files
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Ignore package lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore other files
+*.log
+*.tsbuildinfo
+
+# Ignore specific generated files
+next-env.d.ts

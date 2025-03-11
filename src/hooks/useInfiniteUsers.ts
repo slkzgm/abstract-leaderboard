@@ -1,0 +1,107 @@
+// src/hooks/useInfiniteUsers.ts
+'use client'
+
+import { useCallback, useEffect, useState } from 'react'
+import type { LeaderboardParams, SortField, SortOrder, User } from '@/types/user'
+
+export function useInfiniteUsers() {
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [hasMore, setHasMore] = useState(true)
+  const [params, setParams] = useState<LeaderboardParams>({
+    limit: 20,
+    skip: 0,
+    sortField: 'totalExperiencePoints',
+    sortOrder: -1,
+    search: '',
+  })
+
+  const fetchUsers = useCallback(
+    async (isInitialFetch = false) => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const queryParams = new URLSearchParams({
+          limit: params.limit.toString(),
+          skip: params.skip.toString(),
+          sortField: params.sortField,
+          sortOrder: params.sortOrder.toString(),
+          ...(params.search ? { search: params.search } : {}),
+        })
+
+        const response = await fetch(`/api/users?${queryParams}`)
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch users')
+        }
+
+        const data = await response.json()
+
+        setUsers(prev => (isInitialFetch ? data.users : [...prev, ...data.users]))
+        setHasMore(data.hasMore)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [params]
+  )
+
+  // Initial fetch
+  useEffect(() => {
+    // Reset the skip parameter and fetch users from the beginning when sort or search changes
+    if (params.skip !== 0) {
+      setParams(prev => ({
+        ...prev,
+        skip: 0,
+      }))
+    } else {
+      fetchUsers(true)
+    }
+  }, [params.sortField, params.sortOrder, params.search, params.skip, fetchUsers])
+
+  // Load more function
+  const loadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      setParams(prev => ({
+        ...prev,
+        skip: prev.skip + prev.limit,
+      }))
+    }
+  }, [loading, hasMore])
+
+  // Update sort options
+  const updateSort = useCallback((field: SortField, order: SortOrder) => {
+    setParams(prev => ({
+      ...prev,
+      sortField: field,
+      sortOrder: order,
+      skip: 0, // Reset pagination when sorting changes
+    }))
+  }, [])
+
+  // Update search
+  const updateSearch = useCallback((search: string) => {
+    setParams(prev => ({
+      ...prev,
+      search,
+      skip: 0, // Reset pagination when search changes
+    }))
+  }, [])
+
+  return {
+    users,
+    loading,
+    error,
+    hasMore,
+    loadMore,
+    updateSort,
+    updateSearch,
+    sortField: params.sortField,
+    sortOrder: params.sortOrder,
+    search: params.search,
+  }
+}
