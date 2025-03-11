@@ -17,6 +17,9 @@ export function useInfiniteUsers() {
     search: '',
   })
 
+  // Add a separate state to track when we need to reset data
+  const [shouldResetData, setShouldResetData] = useState(false)
+
   const fetchUsers = useCallback(
     async (isInitialFetch = false) => {
       try {
@@ -41,27 +44,47 @@ export function useInfiniteUsers() {
 
         setUsers(prev => (isInitialFetch ? data.users : [...prev, ...data.users]))
         setHasMore(data.hasMore)
+
+        // Reset shouldResetData after fetching
+        if (shouldResetData) {
+          setShouldResetData(false)
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred')
       } finally {
         setLoading(false)
       }
     },
-    [params]
+    [params, shouldResetData]
   )
 
-  // Initial fetch
+  // Effect for sort or search changes
   useEffect(() => {
-    // Reset the skip parameter and fetch users from the beginning when sort or search changes
-    if (params.skip !== 0) {
+    // Only reset and fetch when sort field, sort order, or search changes
+    // Not when skip changes
+    const handleSortOrSearchChange = () => {
+      setShouldResetData(true)
       setParams(prev => ({
         ...prev,
         skip: 0,
       }))
-    } else {
-      fetchUsers(true)
     }
-  }, [params.sortField, params.sortOrder, params.search, params.skip, fetchUsers])
+
+    return () => {
+      // This cleanup function ensures we don't reset data when unmounting
+    }
+  }, [params.sortField, params.sortOrder, params.search])
+
+  // Separate effect for fetching data
+  useEffect(() => {
+    // If we should reset data or it's an initial load (skip is 0), fetch with reset
+    if (shouldResetData || params.skip === 0) {
+      fetchUsers(true)
+    } else if (params.skip > 0) {
+      // Otherwise, this is a "load more" operation
+      fetchUsers(false)
+    }
+  }, [params.skip, params.sortField, params.sortOrder, params.search, shouldResetData, fetchUsers])
 
   // Load more function
   const loadMore = useCallback(() => {
@@ -75,6 +98,7 @@ export function useInfiniteUsers() {
 
   // Update sort options
   const updateSort = useCallback((field: SortField, order: SortOrder) => {
+    setShouldResetData(true)
     setParams(prev => ({
       ...prev,
       sortField: field,
@@ -85,6 +109,7 @@ export function useInfiniteUsers() {
 
   // Update search
   const updateSearch = useCallback((search: string) => {
+    setShouldResetData(true)
     setParams(prev => ({
       ...prev,
       search,
