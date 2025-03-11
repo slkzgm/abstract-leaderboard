@@ -4,9 +4,10 @@ import type { User } from '@/types/user'
 interface UserRowProps {
   user: User
   rank: number
+  isSearchResult: boolean
 }
 
-export default function UserRow({ user, rank }: UserRowProps) {
+export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
   // Format wallet address to show only first and last few characters
   const formatWallet = (wallet: string) => {
     return `${wallet.substring(0, 6)}...${wallet.substring(wallet.length - 4)}`
@@ -18,17 +19,25 @@ export default function UserRow({ user, rank }: UserRowProps) {
   }
 
   // Get the appropriate badge class for top 3 ranks
-  const getBadgeClass = () => {
-    if (rank === 1) return 'rank-badge rank-badge-1'
-    if (rank === 2) return 'rank-badge rank-badge-2'
-    if (rank === 3) return 'rank-badge rank-badge-3'
+  const getBadgeClass = (position: number) => {
+    if (position === 1) return 'rank-badge rank-badge-1'
+    if (position === 2) return 'rank-badge rank-badge-2'
+    if (position === 3) return 'rank-badge rank-badge-3'
     return ''
   }
 
+  // Determine which rank to display
+  const displayRank = isSearchResult && user.globalRank ? user.globalRank : rank
+  const isTopRank = displayRank <= 3
+
   return (
-    <div className={`leaderboard-row ${rank <= 3 ? 'leaderboard-row-top' : ''}`}>
+    <div className={`leaderboard-row ${isTopRank ? 'leaderboard-row-top' : ''}`}>
       <div className="col-span-1 text-center font-semibold">
-        {rank <= 3 ? <span className={getBadgeClass()}>{rank}</span> : rank}
+        {isTopRank ? (
+          <span className={getBadgeClass(displayRank)}>{displayRank}</span>
+        ) : (
+          displayRank
+        )}
       </div>
       <div className="col-span-4 sm:col-span-3 font-medium truncate" title={user.name}>
         <a

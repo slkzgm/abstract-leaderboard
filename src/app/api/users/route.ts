@@ -34,6 +34,51 @@ export async function GET(request: NextRequest) {
       .limit(limit)
       .toArray()
 
+    // If there's a search, compute actual ranks for the users
+    let ranksMap: Record<string, number> = {}
+
+    if (search) {
+      // Get all user IDs that match the search criteria
+      const matchingUserIds = usersFromDb.map(doc => doc._id.toString())
+
+      if (matchingUserIds.length > 0) {
+        // For each matching user, find their position in the overall leaderboard
+        const rankQueries = matchingUserIds.map(userId => {
+          return new Promise<{ userId: string; rank: number }>(async resolve => {
+            try {
+              // Create a query to get all users with higher scores than this user
+              const user = usersFromDb.find(u => u._id.toString() === userId)
+              if (!user) {
+                resolve({ userId, rank: 0 })
+                return
+              }
+
+              // Count how many users have a higher value for the sort field
+              const comparisonOperator = sortOrder === -1 ? '$gt' : '$lt'
+              const higherRankedCount = await collection.countDocuments({
+                [sortField]: { [comparisonOperator]: user[sortField] },
+              })
+
+              // Rank is position + 1 (counting starts at 0)
+              resolve({ userId, rank: higherRankedCount + 1 })
+            } catch (err) {
+              console.error(`Error calculating rank for user ${userId}:`, err)
+              resolve({ userId, rank: 0 })
+            }
+          })
+        })
+
+        const ranks = await Promise.all(rankQueries)
+        ranksMap = ranks.reduce(
+          (acc, { userId, rank }) => {
+            acc[userId] = rank
+            return acc
+          },
+          {} as Record<string, number>
+        )
+      }
+    }
+
     // Map MongoDB documents to User type
     const users: User[] = usersFromDb.map(doc => ({
       _id: doc._id.toString(),
@@ -42,6 +87,7 @@ export async function GET(request: NextRequest) {
       hasStreamingAccess: Boolean(doc.hasStreamingAccess),
       totalExperiencePoints: Number(doc.totalExperiencePoints) || 0,
       xpMultiplier: Number(doc.xpMultiplier) || 1,
+      globalRank: search ? ranksMap[doc._id.toString()] || 0 : 0,
     }))
 
     return NextResponse.json({

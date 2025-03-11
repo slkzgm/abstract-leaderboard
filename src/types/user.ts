@@ -6,6 +6,7 @@ export interface User {
   hasStreamingAccess: boolean
   totalExperiencePoints: number
   xpMultiplier: number
+  globalRank?: number
 }
 
 export type SortField = 'totalExperiencePoints' | 'name'

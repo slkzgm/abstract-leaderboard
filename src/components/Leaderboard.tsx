@@ -38,6 +38,9 @@ export default function Leaderboard() {
     [loading, hasMore, loadMore]
   )
 
+  // Determine if we're in search mode
+  const isSearchMode = Boolean(search && search.trim() !== '')
+
   return (
     <div className="leaderboard-container">
       <h1 className="leaderboard-title">Abstract Leaderboard</h1>
@@ -86,11 +89,18 @@ export default function Leaderboard() {
           ) : (
             users.map((user, index) => (
               <div key={user._id} ref={index === users.length - 1 ? lastUserElementRef : undefined}>
-                <UserRow user={user} rank={index + 1} />
+                <UserRow user={user} rank={index + 1} isSearchResult={isSearchMode} />
               </div>
             ))
           )}
         </div>
+
+        {/* Search mode indicator */}
+        {isSearchMode && users.length > 0 && (
+          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-900 dark:text-yellow-100 text-center text-sm">
+            Showing search results with global ranking
+          </div>
+        )}
 
         {/* Loading indicator */}
         {loading && (
