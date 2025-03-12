@@ -79,14 +79,17 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Map MongoDB documents to User type
+    // Map MongoDB documents to User type with new fields
     const users: User[] = usersFromDb.map(doc => ({
       _id: doc._id.toString(),
+      id: doc.id || '',
       name: doc.name || '',
       walletAddress: doc.walletAddress || '',
       hasStreamingAccess: Boolean(doc.hasStreamingAccess),
       totalExperiencePoints: Number(doc.totalExperiencePoints) || 0,
       xpMultiplier: Number(doc.xpMultiplier) || 1,
+      tier: Number(doc.tier) || 1,
+      badgeCount: Number(doc.badgeCount) || 0,
       globalRank: search ? ranksMap[doc._id.toString()] || 0 : 0,
     }))
 

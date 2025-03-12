@@ -58,9 +58,11 @@ export default function Leaderboard() {
         {/* Header */}
         <div className="leaderboard-header">
           <div className="col-span-1 text-center">#</div>
-          <div className="col-span-4 sm:col-span-3">User</div>
-          <div className="col-span-7 sm:col-span-4">Wallet</div>
+          <div className="col-span-4 sm:col-span-2">User</div>
+          <div className="col-span-7 sm:col-span-3">Wallet</div>
+          <div className="hidden sm:block sm:col-span-1 text-center">Tier</div>
           <div className="hidden sm:block sm:col-span-1 text-center">Multiplier</div>
+          <div className="hidden sm:block sm:col-span-1 text-center">Badges</div>
           <div className="hidden sm:block sm:col-span-1 text-center">Streaming</div>
           <div className="col-span-2 text-right">XP</div>
         </div>

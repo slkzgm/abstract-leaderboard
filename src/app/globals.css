@@ -78,3 +78,53 @@ body {
 .rank-badge-3 {
   @apply bg-amber-600;
 }
+
+/* Tier badge styles */
+.tier-badge {
+  @apply px-2 py-1 rounded-lg font-medium text-sm;
+}
+
+.tier-bronze {
+  @apply bg-amber-700/20 text-amber-700 dark:bg-amber-800/40 dark:text-amber-300;
+}
+
+.tier-silver {
+  @apply bg-gray-300/30 text-gray-700 dark:bg-gray-400/20 dark:text-gray-300;
+}
+
+.tier-gold {
+  @apply bg-yellow-400/20 text-yellow-700 dark:bg-yellow-500/30 dark:text-yellow-300;
+}
+
+.tier-platinum {
+  @apply bg-sky-400/20 text-sky-700 dark:bg-sky-500/30 dark:text-sky-300;
+}
+
+/* Custom tooltip for truncated content */
+.custom-tooltip {
+  @apply relative;
+}
+
+.custom-tooltip:hover::after {
+  content: attr(data-tooltip);
+  @apply absolute left-0 top-full mt-1 p-2 bg-gray-800 text-white text-xs rounded-md z-10 w-max max-w-xs;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 640px) {
+  .leaderboard-row {
+    @apply py-3;
+  }
+
+  .leaderboard-header {
+    @apply py-3;
+  }
+
+  .mobile-badge-container {
+    @apply flex flex-wrap gap-1 mt-1;
+  }
+
+  .mobile-badge {
+    @apply text-xs px-1.5 py-0.5;
+  }
+}
