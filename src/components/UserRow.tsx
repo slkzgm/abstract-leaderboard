@@ -61,13 +61,13 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
   }
 
   return (
-    <div
-      className={`leaderboard-row ${isTopRank ? 'leaderboard-row-top' : ''}`}
-      onClick={handleRowClick}
-      style={{ cursor: 'pointer' }}
-    >
+    <div className={`leaderboard-row ${isTopRank ? 'leaderboard-row-top' : ''}`}>
       {/* Desktop View */}
-      <div className="hidden sm:block col-span-1 text-center font-semibold">
+      <div
+        className="hidden sm:block col-span-1 text-center font-semibold rank-clickable"
+        onClick={handleRowClick}
+        title="View detailed user profile"
+      >
         {isTopRank ? (
           <span className={getBadgeClass(displayRank)}>{displayRank}</span>
         ) : (
@@ -118,9 +118,17 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
       </div>
       <div className="hidden sm:block col-span-1 text-center">
         {user.hasStreamingAccess ? (
-          <span className="bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-1 rounded-lg font-medium text-sm">
-            Yes
-          </span>
+          <a
+            href={`https://portal.abs.xyz/stream/${user.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block"
+            onClick={handleLinkClick}
+          >
+            <span className="bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-1 rounded-lg font-medium text-sm hover:bg-green-200 dark:hover:bg-green-800/40">
+              Yes
+            </span>
+          </a>
         ) : (
           <span className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded-lg font-medium text-sm">
             No
@@ -132,7 +140,11 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
       </div>
 
       {/* Mobile View */}
-      <div className="sm:hidden col-span-2 text-center font-semibold">
+      <div
+        className="sm:hidden col-span-2 text-center font-semibold rank-clickable"
+        onClick={handleRowClick}
+        title="View detailed user profile"
+      >
         {isTopRank ? (
           <span className={getBadgeClass(displayRank)}>{displayRank}</span>
         ) : (
@@ -176,9 +188,16 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
             {user.badgeCount} Badges
           </span>
           {user.hasStreamingAccess && (
-            <span className="bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-md text-xs">
-              Streaming
-            </span>
+            <a
+              href={`https://portal.abs.xyz/stream/${user.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleLinkClick}
+            >
+              <span className="bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-md text-xs hover:bg-green-200 dark:hover:bg-green-800/40">
+                Streaming
+              </span>
+            </a>
           )}
         </div>
       </div>

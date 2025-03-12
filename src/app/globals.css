@@ -62,7 +62,15 @@ body {
   @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-750;
 }
 
-/* Badge styles for top ranks */
+/* Clickable rank styling */
+.rank-clickable {
+  @apply cursor-pointer transition-colors duration-200;
+}
+
+.rank-clickable:hover {
+  @apply text-primary-600 dark:text-primary-400;
+}
+
 .rank-badge {
   @apply inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold text-sm;
 }
