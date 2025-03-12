@@ -135,4 +135,8 @@ body {
   .mobile-badge {
     @apply text-xs px-1.5 py-0.5;
   }
+
+  .sort-button {
+    @apply px-2 py-1.5 text-sm;
+  }
 }

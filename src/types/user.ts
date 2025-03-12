@@ -12,7 +12,7 @@ export interface User {
   badgeCount: number
 }
 
-export type SortField = 'totalExperiencePoints' | 'name'
+export type SortField = 'totalExperiencePoints' | 'name' | 'xpMultiplier'
 export type SortOrder = 1 | -1
 
 export interface LeaderboardParams {

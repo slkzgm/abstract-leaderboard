@@ -43,7 +43,7 @@ export default function SortOptions({ sortField, sortOrder, onSortChange }: Sort
   }
 
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-wrap gap-3">
       <button
         onClick={() => handleSortChange('totalExperiencePoints')}
         className={`sort-button ${
@@ -59,6 +59,14 @@ export default function SortOptions({ sortField, sortOrder, onSortChange }: Sort
         }`}
       >
         Name {getSortIcon('name')}
+      </button>
+      <button
+        onClick={() => handleSortChange('xpMultiplier')}
+        className={`sort-button ${
+          sortField === 'xpMultiplier' ? 'sort-button-active' : 'sort-button-inactive'
+        }`}
+      >
+        Multiplier {getSortIcon('xpMultiplier')}
       </button>
     </div>
   )
