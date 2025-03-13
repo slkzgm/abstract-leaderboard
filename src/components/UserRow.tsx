@@ -14,9 +14,9 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
     return `${wallet.substring(0, 6)}...${wallet.substring(wallet.length - 4)}`
   }
 
-  // Format large numbers with commas
+  // Format large numbers with commas using a consistent locale
   const formatNumber = (num: number) => {
-    return num.toLocaleString()
+    return num.toLocaleString('en-US')
   }
 
   // Get the appropriate badge class for top 3 ranks
@@ -50,11 +50,6 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
   // Get tier name
   const tierName = getTierName(user.tier)
 
-  // Handler for row click
-  const handleRowClick = () => {
-    window.open(`https://backend.portal.abs.xyz/api/user/${user.id}`, '_blank')
-  }
-
   // Handler for link clicks, to stop propagation
   const handleLinkClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -65,8 +60,7 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
       {/* Desktop View */}
       <div
         className="hidden sm:block col-span-1 text-center font-semibold rank-clickable"
-        onClick={handleRowClick}
-        title="View detailed user profile"
+        title={user.id}
       >
         {isTopRank ? (
           <span className={getBadgeClass(displayRank)}>{displayRank}</span>
@@ -142,8 +136,7 @@ export default function UserRow({ user, rank, isSearchResult }: UserRowProps) {
       {/* Mobile View */}
       <div
         className="sm:hidden col-span-2 text-center font-semibold rank-clickable"
-        onClick={handleRowClick}
-        title="View detailed user profile"
+        title={user.id}
       >
         {isTopRank ? (
           <span className={getBadgeClass(displayRank)}>{displayRank}</span>
